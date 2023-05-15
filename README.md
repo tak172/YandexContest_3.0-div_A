@@ -1,5 +1,5 @@
 <p align="center">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZNsg6FJ8n6IDgdpkGce23VLRI8sSdbhECLw&usqp=CAU" alt="Project Logo" width="726">
+      <img src="[https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZNsg6FJ8n6IDgdpkGce23VLRI8sSdbhECLw&usqp=CAU](https://ipk19.ru/upload/iblock/0ae/p1l1u14i7nb4gh27h9xwcaeprqytlo8u/3.jpg)" alt="Project Logo" width="726">
 </p>
 
 <p align="right">
