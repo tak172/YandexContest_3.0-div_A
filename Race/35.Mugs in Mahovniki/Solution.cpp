@@ -1,31 +1,32 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <fstream>
+#include<iostream>
+#include<vector>
+#include<set>
 using namespace std;
 int main() {
-	vector<int> sim(94, 0);
-	string str, ans, text;
-	fstream file("input.txt");
-	while(!file.eof()){ 
-		getline(file, text);
-		str += text;
+	int n; cin >> n;
+	vector<vector<int>> r(n + 1);
+	vector<int> c(n + 1, 0), ans;
+	set<int> emp;
+	int val, to;
+	for (int i = 1; i < r.size(); i++) {
+		cin >> val;
+		for (int j = 0; j < val; j++) {
+			cin >> to;
+			r[i].push_back(to);
+			c[to]++;
+		}
 	}
-	int max = 0;
-	for (int i = 0; i < str.size(); i++) if ((int)str[i] >= 33 && (int)str[i] <= 126) {
-		sim[(int)str[i] - 33]++;
-		if (max < sim[(int)str[i] - 33]) max = sim[(int)str[i] - 33];
+	for (int i = 1; i < c.size(); i++) if (c[i] == 0) emp.insert(i);
+	while (!emp.empty()) {
+		val = *emp.rbegin();
+		emp.erase(*emp.rbegin());
+		ans.push_back(val);
+		for (int i = 0; i < r[val].size(); i++) {
+			to = r[val][i];
+			c[to]--;
+			if (c[to] == 0) emp.insert(to);
+		}
 	}
-	for (int i = 0; i < sim.size(); i++) if (sim[i]) ans += char(i + 33);
-	for (int i = 0; i < max; i++) {
-		for (int j = 0; j < sim.size(); j++)
-			if (sim[j]) if (sim[j] == max - i) {
-				cout << '#';
-				sim[j]--;
-			}
-			else cout << " ";
-		cout << endl;
-	}
-	cout << ans;
+	for (int i = ans.size() - 1; i >= 0; i--) cout << ans[i] << " ";
 	return 0;
 }

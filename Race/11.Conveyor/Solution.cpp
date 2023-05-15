@@ -1,31 +1,38 @@
 #include <iostream>
+#include <stack>
 #include <vector>
-#include <string>
 #include <fstream>
 using namespace std;
+bool Foo(vector<double>& ans);
 int main() {
-	vector<int> sim(94, 0);
-	string str, ans, text;
-	fstream file("input.txt");
-	while(!file.eof()){ 
-		getline(file, text);
-		str += text;
-	}
-	int max = 0;
-	for (int i = 0; i < str.size(); i++) if ((int)str[i] >= 33 && (int)str[i] <= 126) {
-		sim[(int)str[i] - 33]++;
-		if (max < sim[(int)str[i] - 33]) max = sim[(int)str[i] - 33];
-	}
-	for (int i = 0; i < sim.size(); i++) if (sim[i]) ans += char(i + 33);
-	for (int i = 0; i < max; i++) {
-		for (int j = 0; j < sim.size(); j++)
-			if (sim[j]) if (sim[j] == max - i) {
-				cout << '#';
-				sim[j]--;
+	int n, k; cin >> n;
+	while (n--) {
+		cin >> k;
+		stack<double> temp;
+		vector<double> ans;
+		double val;
+		for (int i = 0; i < k; i++) {
+			cin >> val;
+			if (temp.empty() || temp.top() >= val) temp.push(val);
+			else {
+				while (!temp.empty() && temp.top() < val) {
+					ans.push_back(temp.top());
+					temp.pop();
+				}
+				temp.push(val);
 			}
-			else cout << " ";
-		cout << endl;
+		}
+		while (!temp.empty()) {
+			ans.push_back(temp.top());
+			temp.pop();
+		}
+		if (Foo(ans)) cout << "1\n";
+		else cout << "0\n";
 	}
-	cout << ans;
 	return 0;
+}
+
+bool Foo(vector<double>& ans) {
+	for (int i = 1; i < ans.size(); i++) if (ans[i - 1] > ans[i]) return 0;
+	return 1;
 }

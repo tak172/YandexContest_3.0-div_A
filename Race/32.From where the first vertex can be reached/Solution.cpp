@@ -1,31 +1,37 @@
 #include <iostream>
 #include <vector>
-#include <string>
-#include <fstream>
+#include <set>
 using namespace std;
+bool dfs(vector<vector<int>>& r, vector<bool>& visited, vector<bool>& fl, int now);
 int main() {
-	vector<int> sim(94, 0);
-	string str, ans, text;
-	fstream file("input.txt");
-	while(!file.eof()){ 
-		getline(file, text);
-		str += text;
+	int n, m, idx, val; cin >> n >> m;
+	vector < vector<int>> r(n + 1);
+	vector<bool> visitet(n + 1, false);
+	vector<bool> fl(n + 1);
+	for (int i = 0; i < m; i++){
+		cin >> idx >> val;
+		r[idx].push_back(val);
 	}
-	int max = 0;
-	for (int i = 0; i < str.size(); i++) if ((int)str[i] >= 33 && (int)str[i] <= 126) {
-		sim[(int)str[i] - 33]++;
-		if (max < sim[(int)str[i] - 33]) max = sim[(int)str[i] - 33];
+	for (int i = 1; i <= n; i++){
+		dfs(r, visitet, fl, i);
+		for (int j = 0; j < visitet.size(); j++) visitet[i] = false;
 	}
-	for (int i = 0; i < sim.size(); i++) if (sim[i]) ans += char(i + 33);
-	for (int i = 0; i < max; i++) {
-		for (int j = 0; j < sim.size(); j++)
-			if (sim[j]) if (sim[j] == max - i) {
-				cout << '#';
-				sim[j]--;
-			}
-			else cout << " ";
-		cout << endl;
-	}
-	cout << ans;
+	set<int> ans;
+	ans.insert(1);
+	for (int i = 0; i < fl.size(); i++)	if (fl[i]) ans.insert(i);
+	for (auto& it : ans) cout << it << " ";
 	return 0;
+}
+
+bool dfs(vector<vector<int>>& r, vector<bool>& visited, vector<bool>& fl, int now) {
+	visited[now] = true;
+	if (now == 1) return true;
+	for (auto& it : r[now]) {
+		if (fl[it]) {
+			fl[now] = true;
+			continue;
+		}
+		if (!visited[it]) fl[now] = fl[now] || dfs(r, visited, fl, it);
+	}
+	return fl[now];
 }

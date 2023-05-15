@@ -1,31 +1,51 @@
 #include <iostream>
-#include <vector>
-#include <string>
-#include <fstream>
+#include <stack>
 using namespace std;
+long long max(long long a, long long b);
+struct row {
+	long long lenght;
+	long long count = 1;
+};
 int main() {
-	vector<int> sim(94, 0);
-	string str, ans, text;
-	fstream file("input.txt");
-	while(!file.eof()){ 
-		getline(file, text);
-		str += text;
-	}
-	int max = 0;
-	for (int i = 0; i < str.size(); i++) if ((int)str[i] >= 33 && (int)str[i] <= 126) {
-		sim[(int)str[i] - 33]++;
-		if (max < sim[(int)str[i] - 33]) max = sim[(int)str[i] - 33];
-	}
-	for (int i = 0; i < sim.size(); i++) if (sim[i]) ans += char(i + 33);
-	for (int i = 0; i < max; i++) {
-		for (int j = 0; j < sim.size(); j++)
-			if (sim[j]) if (sim[j] == max - i) {
-				cout << '#';
-				sim[j]--;
+	long long n, idx = 0; cin >> n;
+	stack<row> st;
+	row val;
+	long long ans = 0;
+	cin >> val.lenght;
+	st.push(val);
+	val.count = 1;
+	for (int i = 1; i < n; i++){
+		cin >> val.lenght;
+		val.count = 1;
+		if (val.lenght > st.top().lenght) st.push(val);
+		else {
+			while (!st.empty() && val.lenght < st.top().lenght) {
+				idx += st.top().count;
+				ans = max(ans, st.top().lenght * idx);
+				st.pop();
 			}
-			else cout << " ";
-		cout << endl;
+			if (!st.empty() && st.top().lenght == val.lenght) {
+				val.count += st.top().count + idx;
+				st.pop();
+			}
+			else val.count += idx;
+			st.push(val);
+			idx = 0;
+		}
 	}
-	cout << ans;
+	if (st.empty()) cout << ans;
+	else {
+		idx = 0;
+		while (!st.empty()) {
+			idx+= st.top().count;
+			ans = max(ans, st.top().lenght * idx);
+			st.pop();
+		}
+		cout << ans;
+	}
 	return 0;
+}
+long long max(long long a, long long b) {
+	if (a > b) return a;
+	return b;
 }

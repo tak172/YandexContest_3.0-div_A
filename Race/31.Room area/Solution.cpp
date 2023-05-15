@@ -1,31 +1,29 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <fstream>
 using namespace std;
+int Count = 0;
+void Rec(vector<vector<char>>& r, int i, int j);
 int main() {
-	vector<int> sim(94, 0);
-	string str, ans, text;
-	fstream file("input.txt");
-	while(!file.eof()){ 
-		getline(file, text);
-		str += text;
+	int n, coord_i, coord_j; cin >> n;
+	vector<vector<char>> r(n, vector<char>(n));
+	string str;
+	for (int i = 0; i < n; i++) {
+		cin >> str;
+		for (int j = 0; j < n; j++) r[i][j] = str[j];
 	}
-	int max = 0;
-	for (int i = 0; i < str.size(); i++) if ((int)str[i] >= 33 && (int)str[i] <= 126) {
-		sim[(int)str[i] - 33]++;
-		if (max < sim[(int)str[i] - 33]) max = sim[(int)str[i] - 33];
-	}
-	for (int i = 0; i < sim.size(); i++) if (sim[i]) ans += char(i + 33);
-	for (int i = 0; i < max; i++) {
-		for (int j = 0; j < sim.size(); j++)
-			if (sim[j]) if (sim[j] == max - i) {
-				cout << '#';
-				sim[j]--;
-			}
-			else cout << " ";
-		cout << endl;
-	}
-	cout << ans;
+	cin >> coord_i >> coord_j;
+	Rec(r, coord_i - 1, coord_j - 1);
+	cout << Count;
 	return 0;
+}
+void Rec(vector<vector<char>>& r, int i, int j) {
+	if (r[i][j] == '.') {
+		Count++;
+		r[i][j] = '*';
+		Rec(r, i - 1, j);
+		Rec(r, i, j - 1);
+		Rec(r, i + 1, j);
+		Rec(r, i, j + 1);
+	}
 }

@@ -1,31 +1,22 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <fstream>
+#include <cmath>
 using namespace std;
+
 int main() {
-	vector<int> sim(94, 0);
-	string str, ans, text;
-	fstream file("input.txt");
-	while(!file.eof()){ 
-		getline(file, text);
-		str += text;
+	string str1, str2; cin >> str1 >> str2;
+	int n = (int)str1.size(), m = (int)str2.size();
+	vector<vector<int>> d(n + 1, vector<int>(m + 1, 0));
+	for (int i = 0; i < n + 1; i++)	d[i][0] = i;
+	for (int i = 0; i < m + 1; i++)	d[0][i] = i;
+	for (int i = 1; i < n + 1; i++) {
+		for (int j = 1; j < m + 1; j++) {
+			d[i][j] = min(d[i][j - 1], d[i - 1][j]) + 1;
+			if (str1[i - 1] == str2[j - 1]) d[i][j] = min(d[i][j], d[i - 1][j - 1]);
+			else d[i][j] = min(d[i][j], d[i - 1][j - 1] + 1);
+		}
 	}
-	int max = 0;
-	for (int i = 0; i < str.size(); i++) if ((int)str[i] >= 33 && (int)str[i] <= 126) {
-		sim[(int)str[i] - 33]++;
-		if (max < sim[(int)str[i] - 33]) max = sim[(int)str[i] - 33];
-	}
-	for (int i = 0; i < sim.size(); i++) if (sim[i]) ans += char(i + 33);
-	for (int i = 0; i < max; i++) {
-		for (int j = 0; j < sim.size(); j++)
-			if (sim[j]) if (sim[j] == max - i) {
-				cout << '#';
-				sim[j]--;
-			}
-			else cout << " ";
-		cout << endl;
-	}
-	cout << ans;
+	cout << d[n][m];
 	return 0;
 }

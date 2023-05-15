@@ -1,31 +1,54 @@
 #include <iostream>
-#include <vector>
 #include <string>
-#include <fstream>
+#include <stack>
 using namespace std;
-int main() {
-	vector<int> sim(94, 0);
-	string str, ans, text;
-	fstream file("input.txt");
-	while(!file.eof()){ 
-		getline(file, text);
-		str += text;
-	}
-	int max = 0;
-	for (int i = 0; i < str.size(); i++) if ((int)str[i] >= 33 && (int)str[i] <= 126) {
-		sim[(int)str[i] - 33]++;
-		if (max < sim[(int)str[i] - 33]) max = sim[(int)str[i] - 33];
-	}
-	for (int i = 0; i < sim.size(); i++) if (sim[i]) ans += char(i + 33);
-	for (int i = 0; i < max; i++) {
-		for (int j = 0; j < sim.size(); j++)
-			if (sim[j]) if (sim[j] == max - i) {
-				cout << '#';
-				sim[j]--;
+bool isValid(string& s);
+int main() {	
+	string s; getline(cin, s);
+	string chars = "</>";
+	for (char i = 'a'; i <= 'z'; i++) chars += i;
+	for (auto &it : s) {
+		char old = it;
+		for (auto newC : chars)
+			if (newC != old) {
+				it = newC;
+				if (isValid(s)) {
+					cout << s;
+					return 0;
+				}
 			}
-			else cout << " ";
-		cout << endl;
+		it = old;
 	}
-	cout << ans;
 	return 0;
+}
+bool isValid(string& s) {
+	if (s[0] != '<' || s.back() != '>') return false;
+	stack<string> open;
+	int i = 0;
+	while (true){
+		if (i == (int)s.size()) break;
+		if (s[i] != '<') return false;
+		i++;
+		bool closing = false;
+		if (s[i] == '/') {
+			closing = true;
+			i++;
+		}
+		if (!('a' <= s[i] && s[i] <= 'z')) return false;
+		string tag(1, s[i]);
+		i++;
+		while ('a' <= s[i] && s[i] <= 'z') {
+			tag += s[i];
+			i++;
+		}
+		if (s[i] != '>') return false;
+		i++;
+		if (!closing) open.push(tag);
+		else {
+			if (open.empty()) return false;
+			if (open.top() != tag) return false;
+			open.pop();
+		}
+	}
+	return open.empty();
 }

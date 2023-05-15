@@ -1,31 +1,13 @@
 #include <iostream>
 #include <vector>
-#include <string>
-#include <fstream>
 using namespace std;
 int main() {
-	vector<int> sim(94, 0);
-	string str, ans, text;
-	fstream file("input.txt");
-	while(!file.eof()){ 
-		getline(file, text);
-		str += text;
-	}
-	int max = 0;
-	for (int i = 0; i < str.size(); i++) if ((int)str[i] >= 33 && (int)str[i] <= 126) {
-		sim[(int)str[i] - 33]++;
-		if (max < sim[(int)str[i] - 33]) max = sim[(int)str[i] - 33];
-	}
-	for (int i = 0; i < sim.size(); i++) if (sim[i]) ans += char(i + 33);
-	for (int i = 0; i < max; i++) {
-		for (int j = 0; j < sim.size(); j++)
-			if (sim[j]) if (sim[j] == max - i) {
-				cout << '#';
-				sim[j]--;
-			}
-			else cout << " ";
-		cout << endl;
-	}
-	cout << ans;
+	long long n, m; cin >> m >> n;
+	vector<vector<long long>> d(m + 1, vector<long long>(n, 0));
+	for (long long i = 1; i < m + 1; i++) d[i][0] = 1;
+	for (long long i = 1; i < m + 1; i++)
+		for (long long j = 1; j < n; j++) d[i][j] = d[i][j - 1] + d[i - 1][j] + d[i - 1][j - 1];
+
+	cout << d[m][n - 1];
 	return 0;
 }

@@ -1,31 +1,31 @@
 #include <iostream>
 #include <vector>
-#include <string>
-#include <fstream>
+#include <cmath>
 using namespace std;
+struct s{
+	int val;
+	int count = 1;
+	int used = -1;
+};
 int main() {
-	vector<int> sim(94, 0);
-	string str, ans, text;
-	fstream file("input.txt");
-	while(!file.eof()){ 
-		getline(file, text);
-		str += text;
-	}
-	int max = 0;
-	for (int i = 0; i < str.size(); i++) if ((int)str[i] >= 33 && (int)str[i] <= 126) {
-		sim[(int)str[i] - 33]++;
-		if (max < sim[(int)str[i] - 33]) max = sim[(int)str[i] - 33];
-	}
-	for (int i = 0; i < sim.size(); i++) if (sim[i]) ans += char(i + 33);
-	for (int i = 0; i < max; i++) {
-		for (int j = 0; j < sim.size(); j++)
-			if (sim[j]) if (sim[j] == max - i) {
-				cout << '#';
-				sim[j]--;
+	int n; cin >> n;
+	vector<s> d(n);
+	vector<int> temp;
+	for (int i = 0; i < n; i++) cin >> d[i].val;
+	for (int i = 1; i < n; i++)
+		for (int j = i - 1; j >= 0; j--)
+			if (d[j].val < d[i].val) {
+				if (d[j].count + 1 > d[i].count) {
+					d[i].count = d[j].count + 1;
+					d[i].used = j;
+				}
 			}
-			else cout << " ";
-		cout << endl;
+	int idx = 0;
+	for (int i = 1; i < d.size(); i++) if (d[i].count > d[idx].count) idx = i;
+	while (idx != -1) {
+		temp.push_back(d[idx].val);
+		idx = d[idx].used;
 	}
-	cout << ans;
+	for (int i = temp.size() - 1; i >= 0; i--) cout << temp[i] << " ";
 	return 0;
 }

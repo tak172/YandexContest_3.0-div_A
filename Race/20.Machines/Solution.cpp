@@ -1,31 +1,76 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <fstream>
+#include<iostream>
+#include <set>
+#include <list>
+#include<vector>
+#include<fstream>
+#include<map>
+#define INF 500001
 using namespace std;
+struct comp
+{
+    template<typename T>
+    bool operator()(const T& l, const T& r) const
+    {
+        if (l.second != r.second) {
+            return l.second < r.second;
+        }
+
+        return l.first < r.first;
+    }
+};
 int main() {
-	vector<int> sim(94, 0);
-	string str, ans, text;
-	fstream file("input.txt");
-	while(!file.eof()){ 
-		getline(file, text);
-		str += text;
-	}
-	int max = 0;
-	for (int i = 0; i < str.size(); i++) if ((int)str[i] >= 33 && (int)str[i] <= 126) {
-		sim[(int)str[i] - 33]++;
-		if (max < sim[(int)str[i] - 33]) max = sim[(int)str[i] - 33];
-	}
-	for (int i = 0; i < sim.size(); i++) if (sim[i]) ans += char(i + 33);
-	for (int i = 0; i < max; i++) {
-		for (int j = 0; j < sim.size(); j++)
-			if (sim[j]) if (sim[j] == max - i) {
-				cout << '#';
-				sim[j]--;
-			}
-			else cout << " ";
-		cout << endl;
-	}
-	cout << ans;
-	return 0;
+    int n, k, p, ans = 0;
+    cin >> n >> k >> p;
+    vector<int> d(p);
+    vector<list<int>> x(n + 1);
+    for (int i = 0; i < p; i++) {
+        cin >> d[i];
+        x[d[i]].push_back(i);
+    }
+    set<int> floor;
+    set<pair<int, int>, comp> my_map;
+    int i = 0;
+    for (; floor.size() != k; i++) {
+        x[d[i]].pop_front();
+        if (x[d[i]].size() == 0) {
+            pair<int, int> t = make_pair(d[i], INF);
+            my_map.insert(t);
+        }
+        else {
+            pair<int, int> t = make_pair(d[i], *x[d[i]].begin());
+            my_map.insert(t);
+        }
+        floor.insert(d[i]);
+    }
+    ans += k;
+    for (; i < p; i++) {
+        if (floor.find(d[i]) != floor.end()) {
+            x[d[i]].pop_front();
+            if (x[d[i]].size() == 0) {
+                pair<int, int> t = make_pair(d[i], INF);
+                my_map.insert(t);
+            }
+            else {
+                pair<int, int> t = make_pair(d[i], *x[d[i]].begin());
+                my_map.insert(t);
+            }
+        }
+        else {
+            floor.erase(my_map.rbegin()->first);
+            my_map.erase(--my_map.end());
+            floor.insert(d[i]);
+            x[d[i]].pop_front();
+            if (x[d[i]].size() == 0) {
+                pair<int, int> t = make_pair(d[i], INF);
+                my_map.insert(t);
+            }
+            else {
+                pair<int, int> t = make_pair(d[i], *x[d[i]].begin());
+                my_map.insert(t);
+            }
+            ans++;
+        }
+    }
+    cout << ans;
+    return 0;
 }

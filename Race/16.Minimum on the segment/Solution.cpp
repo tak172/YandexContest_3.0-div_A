@@ -1,31 +1,19 @@
 #include <iostream>
 #include <vector>
-#include <string>
-#include <fstream>
+#include <map>
 using namespace std;
 int main() {
-	vector<int> sim(94, 0);
-	string str, ans, text;
-	fstream file("input.txt");
-	while(!file.eof()){ 
-		getline(file, text);
-		str += text;
+	int n, k;
+	cin >> n >> k;
+	vector<int> a(n);
+	map<int, int> b;
+	for (int i = 0; i < n; i++) cin >> a[i];
+	for (int i = 0; i < k; i++) b[a[i]] = i;
+	for (int i = 0;; i++){
+		while((!b.empty()) && b.begin()->second < i) b.erase(b.find(b.begin()->first));
+		cout << b.begin()->first << endl;
+		if (i + k < n) b[a[i + k]] = i + k;
+		else return 0;
 	}
-	int max = 0;
-	for (int i = 0; i < str.size(); i++) if ((int)str[i] >= 33 && (int)str[i] <= 126) {
-		sim[(int)str[i] - 33]++;
-		if (max < sim[(int)str[i] - 33]) max = sim[(int)str[i] - 33];
-	}
-	for (int i = 0; i < sim.size(); i++) if (sim[i]) ans += char(i + 33);
-	for (int i = 0; i < max; i++) {
-		for (int j = 0; j < sim.size(); j++)
-			if (sim[j]) if (sim[j] == max - i) {
-				cout << '#';
-				sim[j]--;
-			}
-			else cout << " ";
-		cout << endl;
-	}
-	cout << ans;
 	return 0;
 }
