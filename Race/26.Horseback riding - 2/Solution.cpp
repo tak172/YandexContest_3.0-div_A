@@ -4,7 +4,6 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
-//Ia krytoy
 
 using namespace std;
 std::ostream&
