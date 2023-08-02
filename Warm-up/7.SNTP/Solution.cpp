@@ -15,13 +15,17 @@ int main() {
 	string A, B, C;
 	cin >> A >> B >> C;
 	Time Raz, At, Bt, Ct;
+	
 	Convert(A, At);
 	Convert(B, Bt);
 	Convert(C, Ct);
+	
 	int sA, sC, sB, raz;
 	int const  DAY = 24 * 60 * 60;
+	
 	sA = At.hour * 60 * 60 + At.min * 60 + At.sec;
 	sC = Ct.hour * 60 * 60 + Ct.min * 60 + Ct.sec;
+	
 	if (sC >= sA) {
 		raz = sC - sA;
 		Raz.hour = raz / (60 * 60);
@@ -61,13 +65,24 @@ int main() {
 	Raz.min = raz / 60;
 	raz %= 60;
 	Raz.sec = raz;
-	if (Raz.hour / 10) cout << Raz.hour << ':';
-	else cout << '0' << Raz.hour << ':';
-	if (Raz.min / 10) cout << Raz.min << ':';
-	else cout << '0' << Raz.min << ':';
-	if (Raz.sec / 10) cout << Raz.sec;
-	else cout << '0' << Raz.sec;
+	
+	if (Raz.hour / 10)
+		cout << Raz.hour << ':';
+	else
+		cout << '0' << Raz.hour << ':';
+	
+	if (Raz.min / 10)
+		cout << Raz.min << ':';
+	else
+		cout << '0' << Raz.min << ':';
+	
+	if (Raz.sec / 10)
+		cout << Raz.sec;
+	else
+		cout << '0' << Raz.sec;
+	
 	return 0;
+	
 }
 
 void Convert(string &x, Time &xt) {
