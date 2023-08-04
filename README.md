@@ -10,5 +10,11 @@ ___
 
 ## About
 
-Выкладываю свои решения задач с Yandex Contest 3.0 div A.      
-<img src="https://github.com/devicons/devicon/blob/master/icons/cplusplus/cplusplus-original.svg" title="C++" alt="C++" width="40" height="40"/>&nbsp;
+Выкладываю свои решения задач с Yandex Contest 3.0 div A.  
+
+___
+
+<p align="left">
+      <img src="https://github.com/tak172/YandexContest_3.0-div_A/assets/120005445/91003612-4ddc-4681-88ed-20e896fc4a53" width="503">
+      <img src="https://github.com/tak172/YandexContest_3.0-div_A/assets/120005445/1a85a064-9e23-41da-a785-45c29780e30a" width="503">
+</p>
