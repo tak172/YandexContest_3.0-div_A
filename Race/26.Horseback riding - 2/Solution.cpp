@@ -6,8 +6,8 @@
 #include <cmath>
 
 using namespace std;
-std::ostream&
-operator<<( std::ostream& dest, __int128 value )
+
+std::ostream& operator<<( std::ostream& dest, __int128 value )
 {
     std::ostream::sentry s( dest );
     if ( s ) {
@@ -31,28 +31,36 @@ operator<<( std::ostream& dest, __int128 value )
     }
     return dest;
 }
+
 typedef vector<__int128> v;
 typedef vector<vector< __int128>> vv;
 
-int main(void) {
+int main() {
+    
     int n, m;
     cin >> n >> m;
     vv a = vv(n + 3, v(m + 3, 0));
     a[2][2] = 1;
     int tmp1 = 2, tmp2 = 2;
-    while ((tmp1 < n + 1) || (tmp2 < m + 1))
-    {
-        if (tmp2 == m + 1) tmp1++;
-        else tmp2++;
+    
+    while ((tmp1 < n + 1) || (tmp2 < m + 1)) {
+        if (tmp2 == m + 1)
+            tmp1++;
+        else 
+            tmp2++;
+        
         int i = tmp1;
         int j = tmp2;
-        while ((i <= n + 1) && j >= 2)
-        {
+        
+        while ((i <= n + 1) && j >= 2) {
             a[i][j] = a[i + 1][j - 2] + a[i - 1][j - 2] + a[i - 2][j - 1] + a[i - 2][j + 1];
             i++;
             j--;
         }
     }
+    
     cout  << a[n + 1][m + 1];
+    
     return 0;
+    
 }
